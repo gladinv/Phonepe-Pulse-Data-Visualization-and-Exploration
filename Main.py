@@ -271,11 +271,11 @@ if SELECT =="Search":
         df = pd.DataFrame(cursor.fetchall(), columns=['State','Quarter', 'Year', 'Transaction_type', 'Transaction_amount'])
         return df
     def type_year(year,type):
-        cursor.execute(f"SELECT DISTINCT State,Year,Quarter,District,Transaction_type,Transaction_amount FROM aggregated_transactions WHERE Year = '{year}' AND Transaction_type = '{type}' ORDER BY State,Quarter,Year");
+        cursor.execute(f"SELECT DISTINCT State,Year,Quarter,Transaction_type,Transaction_amount FROM aggregated_transactions WHERE Year = '{year}' AND Transaction_type = '{type}' ORDER BY State,Quarter,Year");
         df = pd.DataFrame(cursor.fetchall(), columns=['State', 'Year', "Quarter", 'Transaction_type', 'Transaction_amount'])
         return df
     def type_state(state,year,type):
-        cursor.execute(f"SELECT DISTINCT State,Year,Quarter,District,Transaction_type,Transaction_amount FROM aggregated_transactions WHERE State = '{state}' AND Transaction_type = '{type}' And Year = '{year}' ORDER BY State,Quarter,Year");
+        cursor.execute(f"SELECT DISTINCT State,Year,Quarter,Transaction_type,Transaction_amount FROM aggregated_transactions WHERE State = '{state}' AND Transaction_type = '{type}' And Year = '{year}' ORDER BY State,Quarter,Year");
         df = pd.DataFrame(cursor.fetchall(), columns=['State', 'Year', "Quarter", 'Transaction_type', 'Transaction_amount'])
         return df
     def district_choice_state(_state):
