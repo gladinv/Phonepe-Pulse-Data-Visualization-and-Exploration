@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
+# In[ ]:
 
 
 import streamlit as st
@@ -31,7 +31,7 @@ video1 = video_file.read()
 video_file1=open('videos/phonepevid.mp4','rb')
 video2=video_file1.read()
 st.set_page_config(page_title='PhonePe Pulse',page_icon=phn,layout='wide')
-st.title(':violet[ PhonePe Pulse Data Visualization ]')
+st.title(':violet[ PhonePe Pulse Data Visualization and Exploration ]')
 
 # reading the data from csv files
 df_aggregated_transactions=pd.read_csv('Aggregated_Transactions.csv')
@@ -75,9 +75,9 @@ df_top_users.to_sql('top_users', connection, if_exists='replace')
 #with st.sidebar:
 SELECT = option_menu(
         menu_title = None,
-        options = ["About","Search","Home","Basic insights","Contact"],
+        options = ["Home","Basic Insights","Search","About","Contact"],
         icons =["bar-chart","search","house","toggles","at"],
-        default_index=2,
+        default_index=0,
         orientation="horizontal",
         styles={
             "container": {"padding": "0!important", "background-color": "white","size":"cover"},
@@ -89,14 +89,14 @@ SELECT = option_menu(
     )
 
 
-if SELECT == "Basic insights":
+if SELECT == "Basic Insights":
     st.title("BASIC INSIGHTS")
     #st.write("----")
-    st.subheader("Let's know some basic insights about the data")
+    st.subheader("Get to know some basic insights about the data")
     options = ["--select--","Top 10 states based on year and amount of transaction","Least 10 states based on type and amount of transaction",
-               "Top 10 mobile brands based on percentage of transaction","Top 10 Registered-users based on States and District(pincode)",
-               "Top 10 Districts based on states and amount of transaction","Least 10 Districts based on states and amount of transaction",
-               "Least 10 registered-users based on Districts and states","Top 10 transactions_type based on states and transaction_amount"]
+               "Top 10 mobile brands based on percentage of transaction","Top 10 registered users based on states and district(pincode)",
+               "Top 10 districts based on states and amount of transaction","Least 10 districts based on states and amount of transaction",
+               "Least 10 registered users based on districts and states","Top 10 transactions type based on states and transaction amount"]
     select = st.selectbox("Select the option",options)
     if select=="Top 10 states based on year and amount of transaction":
         cursor.execute("SELECT DISTINCT State,Transaction_amount,Year,Quarter FROM top_transactions GROUP BY State ORDER BY transaction_amount DESC LIMIT 10");
@@ -143,14 +143,14 @@ if SELECT == "Basic insights":
             with tab2:
                 st.plotly_chart(fig, theme=None, use_container_width=True)
 
-    elif select=="Top 10 Registered-users based on States and District(pincode)":
+    elif select=="Top 10 registered users based on states and district(pincode)":
         cursor.execute("SELECT DISTINCT State,District,Reg_Users FROM top_users GROUP BY State,District ORDER BY Reg_Users DESC LIMIT 10");
         df = pd.DataFrame(cursor.fetchall(),columns=['State','District','Reg_Users'])
         col1,col2 = st.columns(2)
         with col1:
             st.write(df)
         with col2:
-            st.subheader("Top 10 Registered-users based on States and District(pincode)")
+            st.subheader("Top 10 registered users based on states and district(pincode)")
             fig=px.bar(df,x="State",y="Reg_Users")
             tab1, tab2 = st.tabs(["Streamlit theme (default)", "Plotly native theme"])
             with tab1:
@@ -158,14 +158,14 @@ if SELECT == "Basic insights":
             with tab2:
                 st.plotly_chart(fig, theme=None, use_container_width=True)
 
-    elif select=="Top 10 Districts based on states and amount of transaction":
+    elif select=="Top 10 districts based on states and amount of transaction":
         cursor.execute("SELECT DISTINCT State,District,amount FROM map_transactions GROUP BY State,District ORDER BY amount DESC LIMIT 10");
         df = pd.DataFrame(cursor.fetchall(),columns=['State','District','Transaction_amount'])
         col1,col2 = st.columns(2)
         with col1:
             st.write(df)
         with col2:
-            st.subheader("Top 10 Districts based on states and amount of transaction")
+            st.subheader("Top 10 districts based on states and amount of transaction")
             fig=px.bar(df,x="State",y="Transaction_amount")
             tab1, tab2 = st.tabs(["Streamlit theme (default)", "Plotly native theme"])
             with tab1:
@@ -173,14 +173,14 @@ if SELECT == "Basic insights":
             with tab2:
                 st.plotly_chart(fig, theme=None, use_container_width=True)
 
-    elif select=="Least 10 Districts based on states and amount of transaction":
+    elif select=="Least 10 districts based on states and amount of transaction":
         cursor.execute("SELECT DISTINCT State,District,amount FROM map_transactions GROUP BY State,District ORDER BY amount ASC LIMIT 10");
         df = pd.DataFrame(cursor.fetchall(),columns=['State','District','Transaction_amount'])
         col1,col2 = st.columns(2)
         with col1:
             st.write(df)
         with col2:
-            st.subheader("Least 10 Districts based on states and amount of transaction")
+            st.subheader("Least 10 districts based on states and amount of transaction")
             fig=px.bar(df,x="State",y="Transaction_amount")
             tab1, tab2 = st.tabs(["Streamlit theme (default)", "Plotly native theme"])
             with tab1:
@@ -188,14 +188,14 @@ if SELECT == "Basic insights":
             with tab2:
                 st.plotly_chart(fig, theme=None, use_container_width=True)
 
-    elif select=="Least 10 registered-users based on Districts and states":
+    elif select=="Least 10 registered users based on Districts and states":
         cursor.execute("SELECT DISTINCT State,District,Reg_Users FROM top_users GROUP BY State,District ORDER BY Reg_Users ASC LIMIT 10");
         df = pd.DataFrame(cursor.fetchall(),columns=['State','District','Reg_Users'])
         col1,col2 = st.columns(2)
         with col1:
             st.write(df)
         with col2:
-            st.subheader("Least 10 registered-users based on Districts and states")
+            st.subheader("Least 10 registered users based on districts and states")
             fig=px.bar(df,x="State",y="Reg_Users")
             tab1, tab2 = st.tabs(["Streamlit theme (default)", "Plotly native theme"])
             with tab1:
@@ -203,14 +203,14 @@ if SELECT == "Basic insights":
             with tab2:
                 st.plotly_chart(fig, theme=None, use_container_width=True)
 
-    elif select=="Top 10 transactions_type based on states and transaction_amount":
+    elif select=="Top 10 transactions type based on states and transaction_amount":
         cursor.execute("SELECT DISTINCT State, Transaction_type,Transaction_amount FROM aggregated_transactions GROUP BY State,Transaction_type ORDER BY Transaction_amount DESC LIMIT 10");
         df = pd.DataFrame(cursor.fetchall(),columns=['State','Transaction_type','Transaction_amount'])
         col1,col2 = st.columns(2)
         with col1:
             st.write(df)
         with col2:
-            st.subheader("Top 10 transactions_type based on states and transaction_amount")
+            st.subheader("Top 10 transactions type based on states and transaction amount")
             fig=px.bar(df,x="State",y="Transaction_amount")
             tab1, tab2 = st.tabs(["Streamlit theme (default)", "Plotly native theme"])
             with tab1:
@@ -239,12 +239,11 @@ if SELECT == "About":
         st.download_button("DOWNLOAD THE APP NOW", "https://www.phonepe.com/app-download/")
 
     with col2:
-        st.subheader("Phonepe Now Everywhere..!")
         st.video(video2)
 
 if SELECT == "Contact":
     name = " GLADIN VARGHESE "
-    mail = (f'{"Mail :"}  {"gladinv@gmail.com"}')
+    mail = (f'{"Email :"}  {"gladinv@gmail.com"}')
     social_media = {"GITHUB": "https://github.com/gladinv ",
                     "LINKEDIN": "https://www.linkedin.com/in/gladin/"
                     }
@@ -262,7 +261,7 @@ if SELECT == "Contact":
         cols[index].write(f"[{platform}]({link})")
 
 if SELECT =="Search":
-    Topic = ["","Brand","District","Registered-users","Top-Transactions","Transaction-Type"]
+    Topic = ["","Brand","District","Registered Users","Top Transactions","Transaction Type"]
     choice_topic = st.selectbox("Search by",Topic)
 
 #creating functions for query search in sqlite to get the data
@@ -327,7 +326,7 @@ if SELECT =="Search":
         df = pd.DataFrame(cursor.fetchall(), columns=['State', 'Year',"Quarter", 'District', 'Reg_Users'])
         return df
     
-    if choice_topic == "Transaction-Type":
+    if choice_topic == "Transaction Type":
         select = st.selectbox('SELECT VIEW', ['Tabular view', 'Plotly View'], 0)
         if select=='Tabular view':
             col1, col2, col3 = st.columns(3)
@@ -509,7 +508,7 @@ if SELECT =="Search":
                     fig = px.bar(df, x="Quarter", y="Percentage",title=f"{brand_type} Users in {choice_year} at {choice_state}",color='Quarter')
                     st.plotly_chart(fig, theme=None, use_container_width=True)
 
-    if choice_topic == "Top-Transactions":
+    if choice_topic == "Top Transactions":
         select = st.selectbox('View', ['Tabular view', 'Plotly View'], 0)
         if select == 'Tabular view':
             col1, col2, col3 = st.columns(3)
@@ -555,7 +554,7 @@ if SELECT =="Search":
                     st.plotly_chart(fig, theme=None, use_container_width=True)
 
             with col2:
-                st.subheader(" SELECT  YEAR ")
+                st.subheader(" SELECT YEAR ")
                 choice_year = st.selectbox("Year", ["", "2018", "2019", "2020", "2021", "2022"], 0)
                 if choice_state and choice_year:
                     df=transaction_year(choice_state, choice_year)
@@ -571,7 +570,7 @@ if SELECT =="Search":
                     fig = px.bar(df, x="Quarter", y="Transaction_count",title=f"Transactions in {choice_year} at {choice_state} in Quarter {choice_quarter}", color='Quarter')
                     st.plotly_chart(fig, theme=None, use_container_width=True)
 
-    if choice_topic == "Registered-users":
+    if choice_topic == "Registered Users":
         select = st.selectbox('View', ['Tabular view', 'Plotly View'], 0)
         if select == 'Tabular view':
             col1, col2, col3 = st.columns(3)
