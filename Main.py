@@ -267,28 +267,28 @@ if SELECT =="Search":
 
 #creating functions for query search in sqlite to get the data
     def type_(type):
-        cursor.execute(f"SELECT DISTINCT State,Quarter,Year,Transaction_type,amount FROM aggregated_transactions WHERE Transaction_type = '{type}' ORDER BY State,Quarter,Year");
+        cursor.execute(f"SELECT DISTINCT State,Quarter,Year,Transaction_type,Transaction_amount FROM aggregated_transactions WHERE Transaction_type = '{type}' ORDER BY State,Quarter,Year");
         df = pd.DataFrame(cursor.fetchall(), columns=['State','Quarter', 'District', 'Year', 'Transaction_type', 'Transaction_amount'])
         return df
     def type_year(year,type):
-        cursor.execute(f"SELECT DISTINCT State,Year,Quarter,Transaction_type,amount FROM aggregated_transactions WHERE Year = '{year}' AND Transaction_type = '{type}' ORDER BY State,Quarter,Year");
+        cursor.execute(f"SELECT DISTINCT State,Year,Quarter,Transaction_type,Transaction_amount FROM aggregated_transactions WHERE Year = '{year}' AND Transaction_type = '{type}' ORDER BY State,Quarter,Year");
         df = pd.DataFrame(cursor.fetchall(), columns=['State', 'Year',"Quarter", 'District', 'Transaction_type', 'Transaction_amount'])
         return df
     def type_state(state,year,type):
-        cursor.execute(f"SELECT DISTINCT State,Year,Quarter,Transaction_type,amount FROM aggregated_transactions WHERE State = '{state}' AND Transaction_type = '{type}' And Year = '{year}' ORDER BY State,Quarter,Year");
+        cursor.execute(f"SELECT DISTINCT State,Year,Quarter,Transaction_type,Transaction_amount FROM aggregated_transactions WHERE State = '{state}' AND Transaction_type = '{type}' And Year = '{year}' ORDER BY State,Quarter,Year");
         df = pd.DataFrame(cursor.fetchall(), columns=['State', 'Year',"Quarter", 'District', 'Transaction_type', 'Transaction_amount'])
         return df
     def district_choice_state(_state):
         cursor.execute(f"SELECT DISTINCT State,Year,Quarter,District,amount FROM map_transactions WHERE State = '{_state}' ORDER BY State,Year,Quarter,District");
-        df = pd.DataFrame(cursor.fetchall(), columns=['State', 'Year',"Quarter", 'District', 'Transaction_amount'])
+        df = pd.DataFrame(cursor.fetchall(), columns=['State', 'Year',"Quarter", 'District', 'amount'])
         return df
     def dist_year_state(year,_state):
         cursor.execute(f"SELECT DISTINCT State,Year,Quarter,District,amount FROM map_transactions WHERE Year = '{year}' AND State = '{_state}' ORDER BY State,Year,Quarter,District");
-        df = pd.DataFrame(cursor.fetchall(), columns=['State', 'Year',"Quarter", 'District', 'Transaction_amount'])
+        df = pd.DataFrame(cursor.fetchall(), columns=['State', 'Year',"Quarter", 'District', 'amount'])
         return df
     def district_year_state(_dist,year,_state):
         cursor.execute(f"SELECT DISTINCT State,Year,Quarter,District,amount FROM map_transactions WHERE District = '{_dist}' AND State = '{_state}' AND Year = '{year}' ORDER BY State,Year,Quarter,District");
-        df = pd.DataFrame(cursor.fetchall(), columns=['State', 'Year',"Quarter", 'District', 'Transaction_amount'])
+        df = pd.DataFrame(cursor.fetchall(), columns=['State', 'Year',"Quarter", 'District', 'amount'])
         return df
     def brand_(brand_type):
         cursor.execute(f"SELECT State,Year,Quarter,brands,Percentage FROM aggregated_users WHERE brands='{brand_type}' ORDER BY State,Year,Quarter,brands,Percentage DESC");
@@ -436,7 +436,7 @@ if SELECT =="Search":
                 st.subheader(" SELECT YEAR ")
                 choice_year = st.selectbox("Year", ["", "2018", "2019", "2020", "2021", "2022"], 0)
                 df=dist_year_state(choice_year, choice_state)
-                fig = px.bar(df, x="District", y="amount", title=f'Users in  {choice_state} in {choice_year}',color='Quarter')
+                fig = px.bar(df, x="District", y="Transaction_amount", title=f'Users in  {choice_state} in {choice_year}',color='Quarter')
                 st.plotly_chart(fig, theme=None, use_container_width=True)
             with col3:
                 st.subheader(" SELECT DISTRICT ")
