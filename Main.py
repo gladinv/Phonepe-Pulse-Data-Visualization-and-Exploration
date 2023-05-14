@@ -100,7 +100,7 @@ if SELECT == "Basic insights":
     select = st.selectbox("Select the option",options)
     if select=="Top 10 states based on year and amount of transaction":
         cursor.execute("SELECT DISTINCT State,Transaction_amount,Year,Quarter FROM top_transactions GROUP BY State ORDER BY transaction_amount DESC LIMIT 10");
-        df = pd.DataFrame(cursor.fetchall(),columns=['State','Transaction_amount','Year','Quarter'])
+        df = pd.DataFrame(cursor.fetchall(),columns=['State','Transaction_amount','Year','Quarter', 'District'])
         col1,col2 = st.columns(2)
         with col1:
             st.write(df)
@@ -144,14 +144,14 @@ if SELECT == "Basic insights":
                 st.plotly_chart(fig, theme=None, use_container_width=True)
 
     elif select=="Top 10 Registered-users based on States and District(pincode)":
-        cursor.execute("SELECT DISTINCT State,District,RegisteredUser FROM top_users GROUP BY State,District ORDER BY RegisteredUser DESC LIMIT 10");
-        df = pd.DataFrame(cursor.fetchall(),columns=['State','District','RegisteredUser'])
+        cursor.execute("SELECT DISTINCT State,District,Reg_Users FROM top_users GROUP BY State,District ORDER BY Reg_Users DESC LIMIT 10");
+        df = pd.DataFrame(cursor.fetchall(),columns=['State','District','Reg_Users'])
         col1,col2 = st.columns(2)
         with col1:
             st.write(df)
         with col2:
             st.subheader("Top 10 Registered-users based on States and District(pincode)")
-            fig=px.bar(df,x="State",y="RegisteredUser")
+            fig=px.bar(df,x="State",y="Reg_Users")
             tab1, tab2 = st.tabs(["Streamlit theme (default)", "Plotly native theme"])
             with tab1:
                 st.plotly_chart(fig, theme="streamlit", use_container_width=True)
@@ -189,14 +189,14 @@ if SELECT == "Basic insights":
                 st.plotly_chart(fig, theme=None, use_container_width=True)
 
     elif select=="Least 10 registered-users based on Districts and states":
-        cursor.execute("SELECT DISTINCT State,District,RegisteredUser FROM top_users GROUP BY State,District ORDER BY RegisteredUser ASC LIMIT 10");
-        df = pd.DataFrame(cursor.fetchall(),columns=['State','District','RegisteredUser'])
+        cursor.execute("SELECT DISTINCT State,District,Reg_Users FROM top_users GROUP BY State,District ORDER BY Reg_Users ASC LIMIT 10");
+        df = pd.DataFrame(cursor.fetchall(),columns=['State','District','Reg_Users'])
         col1,col2 = st.columns(2)
         with col1:
             st.write(df)
         with col2:
             st.subheader("Least 10 registered-users based on Districts and states")
-            fig=px.bar(df,x="State",y="RegisteredUser")
+            fig=px.bar(df,x="State",y="Reg_Users")
             tab1, tab2 = st.tabs(["Streamlit theme (default)", "Plotly native theme"])
             with tab1:
                 st.plotly_chart(fig, theme="streamlit", use_container_width=True)
@@ -204,8 +204,8 @@ if SELECT == "Basic insights":
                 st.plotly_chart(fig, theme=None, use_container_width=True)
 
     elif select=="Top 10 transactions_type based on states and transaction_amount":
-        cursor.execute("SELECT DISTINCT State,Transaction_type,Transaction_amount FROM aggregated_transactions GROUP BY State,Transaction_type ORDER BY Transaction_amount DESC LIMIT 10");
-        df = pd.DataFrame(cursor.fetchall(),columns=['State','Transaction_type','Transaction_amount'])
+        cursor.execute("SELECT DISTINCT State, 'District', Transaction_type,Transaction_amount FROM aggregated_transactions GROUP BY State,Transaction_type ORDER BY Transaction_amount DESC LIMIT 10");
+        df = pd.DataFrame(cursor.fetchall(),columns=['State', 'District','Transaction_type','Transaction_amount'])
         col1,col2 = st.columns(2)
         with col1:
             st.write(df)
@@ -267,28 +267,28 @@ if SELECT =="Search":
 
 #creating functions for query search in sqlite to get the data
     def type_(type):
-        cursor.execute(f"SELECT DISTINCT State,Quarter,Year,Transaction_type,Transaction_amount FROM aggregated_transactions WHERE Transaction_type = '{type}' ORDER BY State,Quarter,Year");
-        df = pd.DataFrame(cursor.fetchall(), columns=['State','Quarter', 'Year', 'Transaction_type', 'Transaction_amount'])
+        cursor.execute(f"SELECT DISTINCT State,Quarter,Year,Transaction_type,amount FROM aggregated_transactions WHERE Transaction_type = '{type}' ORDER BY State,Quarter,Year");
+        df = pd.DataFrame(cursor.fetchall(), columns=['State','Quarter', 'District', 'Year', 'Transaction_type', 'Transaction_amount'])
         return df
     def type_year(year,type):
-        cursor.execute(f"SELECT DISTINCT State,Year,Quarter,Transaction_type,Transaction_amount FROM aggregated_transactions WHERE Year = '{year}' AND Transaction_type = '{type}' ORDER BY State,Quarter,Year");
-        df = pd.DataFrame(cursor.fetchall(), columns=['State', 'Year',"Quarter", 'Transaction_type', 'Transaction_amount'])
+        cursor.execute(f"SELECT DISTINCT State,Year,Quarter,Transaction_type,amount FROM aggregated_transactions WHERE Year = '{year}' AND Transaction_type = '{type}' ORDER BY State,Quarter,Year");
+        df = pd.DataFrame(cursor.fetchall(), columns=['State', 'Year',"Quarter", 'District', 'Transaction_type', 'Transaction_amount'])
         return df
     def type_state(state,year,type):
-        cursor.execute(f"SELECT DISTINCT State,Year,Quarter,Transaction_type,Transaction_amount FROM aggregated_transactions WHERE State = '{state}' AND Transaction_type = '{type}' And Year = '{year}' ORDER BY State,Quarter,Year");
-        df = pd.DataFrame(cursor.fetchall(), columns=['State', 'Year',"Quarter", 'Transaction_type', 'Transaction_amount'])
+        cursor.execute(f"SELECT DISTINCT State,Year,Quarter,Transaction_type,amount FROM aggregated_transactions WHERE State = '{state}' AND Transaction_type = '{type}' And Year = '{year}' ORDER BY State,Quarter,Year");
+        df = pd.DataFrame(cursor.fetchall(), columns=['State', 'Year',"Quarter", 'District', 'Transaction_type', 'Transaction_amount'])
         return df
     def district_choice_state(_state):
         cursor.execute(f"SELECT DISTINCT State,Year,Quarter,District,amount FROM map_transactions WHERE State = '{_state}' ORDER BY State,Year,Quarter,District");
-        df = pd.DataFrame(cursor.fetchall(), columns=['State', 'Year',"Quarter", 'District', 'amount'])
+        df = pd.DataFrame(cursor.fetchall(), columns=['State', 'Year',"Quarter", 'District', 'Transaction_amount'])
         return df
     def dist_year_state(year,_state):
         cursor.execute(f"SELECT DISTINCT State,Year,Quarter,District,amount FROM map_transactions WHERE Year = '{year}' AND State = '{_state}' ORDER BY State,Year,Quarter,District");
-        df = pd.DataFrame(cursor.fetchall(), columns=['State', 'Year',"Quarter", 'District', 'amount'])
+        df = pd.DataFrame(cursor.fetchall(), columns=['State', 'Year',"Quarter", 'District', 'Transaction_amount'])
         return df
     def district_year_state(_dist,year,_state):
         cursor.execute(f"SELECT DISTINCT State,Year,Quarter,District,amount FROM map_transactions WHERE District = '{_dist}' AND State = '{_state}' AND Year = '{year}' ORDER BY State,Year,Quarter,District");
-        df = pd.DataFrame(cursor.fetchall(), columns=['State', 'Year',"Quarter", 'District', 'amount'])
+        df = pd.DataFrame(cursor.fetchall(), columns=['State', 'Year',"Quarter", 'District', 'Transaction_amount'])
         return df
     def brand_(brand_type):
         cursor.execute(f"SELECT State,Year,Quarter,brands,Percentage FROM aggregated_users WHERE brands='{brand_type}' ORDER BY State,Year,Quarter,brands,Percentage DESC");
@@ -303,7 +303,7 @@ if SELECT =="Search":
         df = pd.DataFrame(cursor.fetchall(), columns=['State', 'Year',"Quarter", 'brands', 'Percentage'])
         return df
     def transaction_state(_state):
-        cursor.execute(f"SELECT State,Year,Quarter,District,Transaction_count,Transaction_amount FROM top_transactions WHERE State = '{_state}' GROUP BY State,Year,Quarter")
+        cursor.execute(f"SELECT State,Year,Quarter,Transaction_count,Transaction_amount FROM top_transactions WHERE State = '{_state}' GROUP BY State,Year,Quarter")
         df = pd.DataFrame(cursor.fetchall(), columns=['State', 'Year',"Quarter", 'District', 'Transaction_count', 'Transaction_amount'])
         return df
     def transaction_year(_state,_year):
@@ -315,16 +315,16 @@ if SELECT =="Search":
         df = pd.DataFrame(cursor.fetchall(), columns=['State', 'Year',"Quarter", 'District', 'Transaction_count', 'Transaction_amount'])
         return df
     def registered_user_state(_state):
-        cursor.execute(f"SELECT State,Year,Quarter,District,RegisteredUser FROM map_users WHERE State = '{_state}' ORDER BY State,Year,Quarter,District")
-        df = pd.DataFrame(cursor.fetchall(), columns=['State', 'Year',"Quarter", 'District', 'RegisteredUser'])
+        cursor.execute(f"SELECT State,Year,Quarter,District,Reg_Users FROM map_users WHERE State = '{_state}' ORDER BY State,Year,Quarter,District")
+        df = pd.DataFrame(cursor.fetchall(), columns=['State', 'Year',"Quarter", 'District', 'Reg_Users'])
         return df
     def registered_user_year(_state,_year):
-        cursor.execute(f"SELECT State,Year,Quarter,District,RegisteredUser FROM map_users WHERE Year = '{_year}' AND State = '{_state}' ORDER BY State,Year,Quarter,District")
-        df = pd.DataFrame(cursor.fetchall(), columns=['State', 'Year',"Quarter", 'District', 'RegisteredUser'])
+        cursor.execute(f"SELECT State,Year,Quarter,District,Reg_Users FROM map_users WHERE Year = '{_year}' AND State = '{_state}' ORDER BY State,Year,Quarter,District")
+        df = pd.DataFrame(cursor.fetchall(), columns=['State', 'Year',"Quarter", 'District', 'Reg_Users'])
         return df
     def registered_user_district(_state,_year,_dist):
-        cursor.execute(f"SELECT State,Year,Quarter,District,RegisteredUser FROM map_users WHERE Year = '{_year}' AND State = '{_state}' AND District = '{_dist}' ORDER BY State,Year,Quarter,District")
-        df = pd.DataFrame(cursor.fetchall(), columns=['State', 'Year',"Quarter", 'District', 'RegisteredUser'])
+        cursor.execute(f"SELECT State,Year,Quarter,District,Reg_Users FROM map_users WHERE Year = '{_year}' AND State = '{_state}' AND District = '{_dist}' ORDER BY State,Year,Quarter,District")
+        df = pd.DataFrame(cursor.fetchall(), columns=['State', 'Year',"Quarter", 'District', 'Reg_Users'])
         return df
     
     if choice_topic == "Transaction-Type":
@@ -614,14 +614,14 @@ if SELECT =="Search":
                 choice_state = st.selectbox("State", menu_state, 0)
                 if choice_state:
                     df=registered_user_state(choice_state)
-                    fig = px.bar(df, x="District", y="RegisteredUser",title=f"Registered users at {choice_state} ",color='Year')
+                    fig = px.bar(df, x="District", y="Reg_Users",title=f"Registered users at {choice_state} ",color='Year')
                     st.plotly_chart(fig, theme=None, use_container_width=True)
             with col2:
                 st.subheader(" SELECT YEAR ")
                 choice_year = st.selectbox("Year", ["", "2018", "2019", "2020", "2021", "2022"], 0)
                 if choice_state and choice_year:
                     df=registered_user_year(choice_state, choice_year)
-                    fig = px.bar(df, x="District", y="RegisteredUser",title=f"Registered users in {choice_state} in {choice_year}",color='Quarter')
+                    fig = px.bar(df, x="District", y="Reg_Users",title=f"Registered users in {choice_state} in {choice_year}",color='Quarter')
                     st.plotly_chart(fig, theme=None, use_container_width=True)
             with col3:
                 st.subheader("SELECT DISTRICT ")
@@ -630,7 +630,7 @@ if SELECT =="Search":
                 district = st.selectbox("search by",dist)
                 if choice_state and choice_year and district:
                     df=registered_user_district(choice_state, choice_year, district)
-                    fig = px.bar(df, x="Quarter", y="RegisteredUser",title=f"Registered users at {choice_state} in {choice_year} in {district}",color='Quarter')
+                    fig = px.bar(df, x="Quarter", y="Reg_Users",title=f"Registered users at {choice_state} in {choice_year} in {district}",color='Quarter')
                     st.plotly_chart(fig, theme=None, use_container_width=True)
 
 
