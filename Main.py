@@ -100,7 +100,7 @@ if SELECT == "Basic insights":
     select = st.selectbox("Select the option",options)
     if select=="Top 10 states based on year and amount of transaction":
         cursor.execute("SELECT DISTINCT State,Transaction_amount,Year,Quarter FROM top_transactions GROUP BY State ORDER BY transaction_amount DESC LIMIT 10");
-        df = pd.DataFrame(cursor.fetchall(),columns=['State','Transaction_amount','Year','Quarter', 'District'])
+        df = pd.DataFrame(cursor.fetchall(),columns=['State','Transaction_amount','Year','Quarter'])
         col1,col2 = st.columns(2)
         with col1:
             st.write(df)
