@@ -436,7 +436,7 @@ if SELECT =="Search":
                 st.subheader(" SELECT YEAR ")
                 choice_year = st.selectbox("Year", ["", "2018", "2019", "2020", "2021", "2022"], 0)
                 df=dist_year_state(choice_year, choice_state)
-                fig = px.bar(df, x="District", y="Transaction_amount", title=f'Users in  {choice_state} in {choice_year}',color='Quarter')
+                fig = px.bar(df, x="District", y="amount", title=f'Users in  {choice_state} in {choice_year}',color='Quarter')
                 st.plotly_chart(fig, theme=None, use_container_width=True)
             with col3:
                 st.subheader(" SELECT DISTRICT ")
