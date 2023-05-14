@@ -188,7 +188,7 @@ if SELECT == "Basic Insights":
             with tab2:
                 st.plotly_chart(fig, theme=None, use_container_width=True)
 
-    elif select=="Least 10 registered users based on Districts and states":
+    elif select=="Least 10 registered users based on districts and states":
         cursor.execute("SELECT DISTINCT State,District,Reg_Users FROM top_users GROUP BY State,District ORDER BY Reg_Users ASC LIMIT 10");
         df = pd.DataFrame(cursor.fetchall(),columns=['State','District','Reg_Users'])
         col1,col2 = st.columns(2)
@@ -203,7 +203,7 @@ if SELECT == "Basic Insights":
             with tab2:
                 st.plotly_chart(fig, theme=None, use_container_width=True)
 
-    elif select=="Top 10 transactions type based on states and transaction_amount":
+    elif select=="Top 10 transactions type based on states and transaction amount":
         cursor.execute("SELECT DISTINCT State, Transaction_type,Transaction_amount FROM aggregated_transactions GROUP BY State,Transaction_type ORDER BY Transaction_amount DESC LIMIT 10");
         df = pd.DataFrame(cursor.fetchall(),columns=['State','Transaction_type','Transaction_amount'])
         col1,col2 = st.columns(2)
