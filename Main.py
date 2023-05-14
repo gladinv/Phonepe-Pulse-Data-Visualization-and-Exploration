@@ -204,8 +204,8 @@ if SELECT == "Basic insights":
                 st.plotly_chart(fig, theme=None, use_container_width=True)
 
     elif select=="Top 10 transactions_type based on states and transaction_amount":
-        cursor.execute("SELECT DISTINCT State, 'District', Transaction_type,Transaction_amount FROM aggregated_transactions GROUP BY State,Transaction_type ORDER BY Transaction_amount DESC LIMIT 10");
-        df = pd.DataFrame(cursor.fetchall(),columns=['State', 'District','Transaction_type','Transaction_amount'])
+        cursor.execute("SELECT DISTINCT State, Transaction_type,Transaction_amount FROM aggregated_transactions GROUP BY State,Transaction_type ORDER BY Transaction_amount DESC LIMIT 10");
+        df = pd.DataFrame(cursor.fetchall(),columns=['State','Transaction_type','Transaction_amount'])
         col1,col2 = st.columns(2)
         with col1:
             st.write(df)
@@ -267,20 +267,20 @@ if SELECT =="Search":
 
 #creating functions for query search in sqlite to get the data
     def type_(type):
-        cursor.execute(f"SELECT DISTINCT State,Quarter,District,Year,Transaction_type,Transaction_amount FROM aggregated_transactions WHERE Transaction_type = '{type}' ORDER BY State,Quarter,Year");
-        df = pd.DataFrame(cursor.fetchall(), columns=['State','Quarter', 'District', 'Year', 'Transaction_type', 'Transaction_amount'])
+        cursor.execute(f"SELECT DISTINCT State,Quarter,Year,Transaction_type,Transaction_amount FROM aggregated_transactions WHERE Transaction_type = '{type}' ORDER BY State,Quarter,Year");
+        df = pd.DataFrame(cursor.fetchall(), columns=['State','Quarter', 'Year', 'Transaction_type', 'Transaction_amount'])
         return df
     def type_year(year,type):
         cursor.execute(f"SELECT DISTINCT State,Year,Quarter,District,Transaction_type,Transaction_amount FROM aggregated_transactions WHERE Year = '{year}' AND Transaction_type = '{type}' ORDER BY State,Quarter,Year");
-        df = pd.DataFrame(cursor.fetchall(), columns=['State', 'Year',"Quarter", 'District', 'Transaction_type', 'Transaction_amount'])
+        df = pd.DataFrame(cursor.fetchall(), columns=['State', 'Year', "Quarter", 'Transaction_type', 'Transaction_amount'])
         return df
     def type_state(state,year,type):
         cursor.execute(f"SELECT DISTINCT State,Year,Quarter,District,Transaction_type,Transaction_amount FROM aggregated_transactions WHERE State = '{state}' AND Transaction_type = '{type}' And Year = '{year}' ORDER BY State,Quarter,Year");
-        df = pd.DataFrame(cursor.fetchall(), columns=['State', 'Year',"Quarter", 'District', 'Transaction_type', 'Transaction_amount'])
+        df = pd.DataFrame(cursor.fetchall(), columns=['State', 'Year', "Quarter", 'Transaction_type', 'Transaction_amount'])
         return df
     def district_choice_state(_state):
         cursor.execute(f"SELECT DISTINCT State,Year,Quarter,District,amount FROM map_transactions WHERE State = '{_state}' ORDER BY State,Year,Quarter,District");
-        df = pd.DataFrame(cursor.fetchall(), columns=['State', 'Year',"Quarter", 'District', 'amount'])
+        df = pd.DataFrame(cursor.fetchall(), columns=['State', 'Year', "Quarter", 'District', 'amount'])
         return df
     def dist_year_state(year,_state):
         cursor.execute(f"SELECT DISTINCT State,Year,Quarter,District,amount FROM map_transactions WHERE Year = '{year}' AND State = '{_state}' ORDER BY State,Year,Quarter,District");
