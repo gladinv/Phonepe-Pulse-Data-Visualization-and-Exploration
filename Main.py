@@ -303,7 +303,7 @@ if SELECT =="Search":
         df = pd.DataFrame(cursor.fetchall(), columns=['State', 'Year',"Quarter", 'brands', 'Percentage'])
         return df
     def transaction_state(_state):
-        cursor.execute(f"SELECT State,Year,Quarter,Transaction_count,Transaction_amount FROM top_transactions WHERE State = '{_state}' GROUP BY State,Year,Quarter")
+        cursor.execute(f"SELECT State,Year,Quarter,District,Transaction_count,Transaction_amount FROM top_transactions WHERE State = '{_state}' GROUP BY State,Year,Quarter")
         df = pd.DataFrame(cursor.fetchall(), columns=['State', 'Year',"Quarter", 'District', 'Transaction_count', 'Transaction_amount'])
         return df
     def transaction_year(_state,_year):
