@@ -2,7 +2,7 @@
 
 ## Github Cloning, Python, Pandas, MySQL, mysql-connector-python, Streamlit, and Plotly.
 
-![MADE WITH PYTHON](http://ForTheBadge.com/images/badges/made-with-python.svg)  [![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://gladinv-twitter-scraping-twitterscraper-me04q6.streamlit.app/)
+![MADE WITH PYTHON](http://ForTheBadge.com/images/badges/made-with-python.svg)  [![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://gladinv-phonepe-pulse-data-visualization-and-explor-main-d3nkr9.streamlit.app/)
 
 Disclaimer: This project is built for research purposes only. I, ***Gladin K. Varghese*** , as the developer am not responsible for any misuse of this project. I believe that this kind of technology should be accessible if needed for the correct reasons.
   
