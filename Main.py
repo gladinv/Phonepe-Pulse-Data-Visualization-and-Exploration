@@ -80,7 +80,7 @@ df_top_users.to_sql('top_users', connection, if_exists='replace')
 SELECT = option_menu(
         menu_title = None,
         options = ["Home","Basic Insights","Map","Search","About","Contact"],
-        icons =["house","bar-chart","map-marker","search","toggles","at"],
+        icons =["house","bar-chart","globe","search","toggles","at"],
         default_index=0,
         orientation="horizontal",
         styles={
@@ -223,7 +223,6 @@ if SELECT == "Basic Insights":
                 st.plotly_chart(fig, theme=None, use_container_width=True)
                 
 if SELECT == "Map":
-    st.title(':violet[PhonePe Pulse Data Analysis:signal_strength:]')
     # DATASETS
     Data_Aggregated_Transaction_df = pd.read_csv(r'data/Data_Aggregated_Transaction_Table.csv')
     Data_Aggregated_User_Summary_df = pd.read_csv(r'data/Data_Aggregated_User_Summary_Table.csv')
