@@ -16,7 +16,6 @@ import warnings
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 warnings.filterwarnings("ignore")
-st. set_page_config(layout="wide")
 #import requests
 #os.walk
 
